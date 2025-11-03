@@ -5,7 +5,7 @@ export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 export TF_VAR_application_name="alacloud"
 export TF_VAR_environment_name="dev"
 
-export TF_VAR_primary_location="westus3"
+export TF_VAR_primary_location="France Central"
 
 
 
