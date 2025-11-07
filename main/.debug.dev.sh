@@ -15,10 +15,6 @@ export BACKEND_STORAGE_CONTAINER=$(terraform -chdir=../init output -state="terra
 export BACKEND_KEY=$TF_VAR_application_name-$TF_VAR_environment_name
 
 
-echo "rs group : " $BACKEND_RESOURCE_GROUP
-echo "BACKEND_STORAGE_ACCOUNT : " $BACKEND_STORAGE_ACCOUNT 
-echo "BACKEND_STORAGE_CONTAINER :" $BACKEND_STORAGE_CONTAINER
-
 
 
 terraform init \
