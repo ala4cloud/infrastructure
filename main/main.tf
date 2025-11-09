@@ -1,4 +1,3 @@
-
 module "database" {
   source           = "./database"
   application_name = var.application_name
@@ -28,4 +27,5 @@ module "keyvault" {
   environment_name               = var.environment_name
   azurerm_cosmosdb_account_name  = module.database.azurerm_cosmosdb_account_name
   azurerm_cosmosdb_database_name = module.database.azurerm_cosmosdb_database_name
+  container_app_api_pricipal_id  = module.api.container_app_api_principal_id
 }

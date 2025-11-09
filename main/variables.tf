@@ -7,3 +7,4 @@ variable "environment_name" {
 variable "primary_location" {
   type = string
 }
+

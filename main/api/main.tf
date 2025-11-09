@@ -23,3 +23,88 @@ resource "azurerm_container_registry" "main" {
     environment = var.environment_name
   }
 }
+
+# Log workspace for the container
+resource "azurerm_log_analytics_workspace" "container_workspace" {
+  name                = "workspace-alacloud-env-container-dev"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+
+  tags = {
+    environment = var.environment_name
+  }
+}
+
+# Azure Container App ENV
+resource "azurerm_container_app_environment" "main" {
+  name                       = "managed-env-alacloud-api-dev"
+  location                   = azurerm_resource_group.main.location
+  resource_group_name        = azurerm_resource_group.main.name
+  logs_destination           = "log-analytics"
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.container_workspace.id
+
+  tags = {
+    environment = var.environment_name
+  }
+}
+
+# Azure Container App 
+resource "azurerm_container_app" "container_api" {
+  name                         = "alacloud-container-api-dev"
+  container_app_environment_id = azurerm_container_app_environment.main.id
+  resource_group_name          = azurerm_resource_group.main.name
+  revision_mode                = "Single"
+  identity {
+    type = "SystemAssigned"
+  }
+
+  secret {
+    name  = "registry-password"
+    value = azurerm_container_registry.main.admin_password
+  }
+  registry {
+    server               = azurerm_container_registry.main.login_server
+    username             = azurerm_container_registry.main.admin_username
+    password_secret_name = "registry-password"
+  }
+  ingress {
+    traffic_weight {
+      percentage      = 100
+      latest_revision = true
+    }
+    target_port                = 80
+    external_enabled           = true
+    allow_insecure_connections = true
+
+  }
+
+
+  template {
+    container {
+
+      name   = "alacloud-container-api-dev"
+      image  = "cralacloudapidev.azurecr.io/alacloud-api:latest"
+      cpu    = 0.5
+      memory = "1Gi"
+
+      env {
+        name  = "ASPNETCORE_ENVIRONMENT"
+        value = "Development"
+      }
+      env {
+        name  = "KEY_VAULT_NAME"
+        value = "kv-alacloud-uhva7-dev"
+      }
+    }
+  }
+
+  tags = {
+    environment = var.environment_name
+  }
+}
+
+
+
+

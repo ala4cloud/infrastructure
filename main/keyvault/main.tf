@@ -3,6 +3,7 @@ resource "azurerm_resource_group" "main" {
   location = var.primary_location
 
 }
+
 data "azurerm_client_config" "current" {}
 
 data "azurerm_cosmosdb_account" "main" {
@@ -49,4 +50,17 @@ resource "azurerm_key_vault_secret" "cosmosdb_connection_string" {
     data.azurerm_cosmosdb_account.main
   ]
 }
+
+
+resource "azurerm_key_vault_access_policy" "access_to_app_container" {
+  key_vault_id = azurerm_key_vault.cosmosdb.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = var.container_app_api_pricipal_id
+
+  secret_permissions = [
+    "Get",
+    "List",
+  ]
+}
+
 
