@@ -10,3 +10,7 @@ variable "primary_location" {
 variable "app_insights_instrumentation_key" {
   type = string
 }
+
+variable "keyvault_github_id" {
+  type = string
+}

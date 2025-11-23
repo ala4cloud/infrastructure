@@ -10,6 +10,11 @@ resource "random_string" "suffix" {
 
 }
 
+data "azurerm_key_vault_secret" "github_token" {
+  name         = "gh-token"
+  key_vault_id = var.keyvault_github_id
+}
+
 
 #azure containter registry creation
 resource "azurerm_container_registry" "main" {
@@ -33,7 +38,7 @@ resource "azurerm_static_web_app" "main" {
   public_network_access_enabled      = true
   repository_branch                  = "main"
   repository_url                     = "https://github.com/ala4cloud/webapp"
-  repository_token                   = "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"
+  repository_token                   = data.azurerm_key_vault_secret.github_token.value
   sku_size                           = "Free"
   sku_tier                           = "Free"
 

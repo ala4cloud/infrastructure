@@ -20,6 +20,7 @@ module "webapp" {
   environment_name                 = var.environment_name
   primary_location                 = var.primary_location
   app_insights_instrumentation_key = module.monitoring.webapp_app_insights_instrumentation_key
+  keyvault_github_id               = module.keyvault.keyvault_github_id
 }
 
 module "keyvault" {
