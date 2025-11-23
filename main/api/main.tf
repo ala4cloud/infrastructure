@@ -85,7 +85,7 @@ resource "azurerm_container_app" "container_api" {
     container {
 
       name   = "alacloud-container-api-dev"
-      image  = "cralacloudapidev.azurecr.io/alacloud-api:latest"
+      image  = "cralacloudapidev.azurecr.io/github-action/container-app:latest"
       cpu    = 0.5
       memory = "1Gi"
 
