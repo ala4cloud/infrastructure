@@ -8,7 +8,7 @@ variable "primary_location" {
   type = string
 }
 
-/*variable "key_vault_cosmos_name_out" {
+variable "app_insights_connection_string" {
   type = string
-}*/
+}
 

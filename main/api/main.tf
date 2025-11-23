@@ -95,7 +95,11 @@ resource "azurerm_container_app" "container_api" {
       }
       env {
         name  = "KEY_VAULT_NAME"
-        value = "kv-alacloud-uhva7-dev"
+        value = "kv-alacloud-cosmosdb-dev"
+      }
+      env {
+        name  = "APPINSIGHTS_CONNECTION_STRING"
+        value = var.app_insights_connection_string
       }
     }
   }

@@ -19,5 +19,9 @@ variable "container_app_api_pricipal_id" {
   type = string
 }
 
+variable "app_insights_instrumentation_key" {
+  type = string
+}
+
 
 

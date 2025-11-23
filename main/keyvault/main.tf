@@ -18,14 +18,14 @@ data "azurerm_cosmosdb_sql_database" "main" {
 
 
 resource "random_string" "suffix" {
-  length  = 5
+  length  = 3
   upper   = false
   special = false
 
 }
 
 resource "azurerm_key_vault" "cosmosdb" {
-  name                     = "kv-${var.application_name}-${random_string.suffix.result}-${var.environment_name}"
+  name                     = "kv-${var.application_name}-cosmosdb-${var.environment_name}"
   location                 = azurerm_resource_group.main.location
   resource_group_name      = azurerm_resource_group.main.name
   sku_name                 = "standard"
@@ -64,3 +64,18 @@ resource "azurerm_key_vault_access_policy" "access_to_app_container" {
 }
 
 
+resource "azurerm_key_vault" "github" {
+  name                     = "kv-${var.application_name}-github-${var.environment_name}"
+  location                 = azurerm_resource_group.main.location
+  resource_group_name      = azurerm_resource_group.main.name
+  sku_name                 = "standard"
+  tenant_id                = data.azurerm_client_config.current.tenant_id
+  purge_protection_enabled = true
+
+}
+
+resource "github_actions_secret" "swa_ai_key" {
+  repository      = "webapp"
+  secret_name     = "VITE_APP_INSIGHTS_KEY"
+  plaintext_value = var.app_insights_instrumentation_key
+}
